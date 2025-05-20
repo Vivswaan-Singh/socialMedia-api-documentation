@@ -1,7 +1,7 @@
 
 # Overview
 
-This API enables a social media application with features for user management, social connections and content interaction. It supports user sign up, log in, sending and managing friend requests, creating, liking and listing posts. This API follows the standard RESTful conventions, and prioritises security. It is desigend for scalaibility and ease of use for developers. 
+This API enables a social media application with features for user management, social connections and content interaction. It supports user sign up, log in, sending and managing friend requests, creating, liking and listing posts. This API follows the standard RESTful conventions, and prioritises security. It is designed for scalability and ease of use for developers. 
 
 
 
@@ -15,7 +15,7 @@ The base URL for accessing all the endpoints is
 
 # Authentication
 
-The API uses JWT (JSON Web token) for authentication. After a successful login or signup a token is returned top the client and must be used for every subsequent request, so that the user can be authenticated without them having to send their credentials every time. 
+The API uses JWT (JSON Web token) for authentication. After a successful login or signup a token is returned to the client and must be used for every subsequent request, so that the user can be authenticated without them having to send their credentials every time. 
 
 ---
 
@@ -28,6 +28,11 @@ The API uses JWT (JSON Web token) for authentication. After a successful login o
 **URL:** `/auth/signup`
 
 **Method:** `POST`
+
+**Request Header** 
+```
+Content-Type: application/json
+```
 
 **Request Body:**
 
@@ -52,9 +57,9 @@ json
         "id": "123abf54",
         "email": "myname@email.com",
         "username": "MyName",
-        created_at: "Date Time"
+        "created_at": "Date Time"
         }
-        "acsess_token": "hjbsdbhjsdhbs..,"
+        "access_token": "hjbsdbhjsdhbs..,"
         "refresh_token": "xcmndnAw...."
     }
     ```
@@ -86,6 +91,11 @@ Failure may also occur due to Internal Server Error (Status code 500).
 
 **Method:** `POST`
 
+**Request Header** 
+```
+Content-Type: application/json
+```
+
 **Request Body:**
 
 json
@@ -103,7 +113,7 @@ json
     json
     ```
     {
-    "message": "LogIn Successfull",
+    "message": "LogIn Successful",
     "user": {
         "id": "123abf54",
         "email": "myname@email.com",
@@ -138,6 +148,12 @@ Failure may also occur due to Internal Server Error (Status code 500) or Invalid
 **URL:** `/friends/requests`
 
 **Method:** `POST`
+
+**Request Header** 
+```
+Content-Type: application/json
+Authorization: Bearer <access_token>
+```
 
 **Request Body:**
 
@@ -188,6 +204,12 @@ Failure may also occur due to Internal Server Error (Status code 500).
 
 **Method:** `POST`
 
+**Request Header** 
+```
+Content-Type: application/json
+Authorization: Bearer <access_token>
+```
+
 **Request Body:**
 
 json
@@ -208,7 +230,7 @@ json
     "message": "Friend Request Accepted/Rejected",
     "request": {
         "id": "167acf74",
-        "status": "accpted/rejected",
+        "status": "accepted/rejected",
         }
     }
     ```
@@ -238,6 +260,12 @@ Failure may also occur due to Internal Server Error (Status code 500).
 **URL:** `/posts`
 
 **Method:** `POST`
+
+**Request Header** 
+```
+Content-Type: application/json
+Authorization: Bearer <access_token>
+```
 
 **Request Body:**
 
@@ -271,7 +299,7 @@ json
     json
     ```
     {
-    "error": "Charcter limit exceeded"
+    "error": "Character limit exceeded"
     }
     ```
 Failure may also occur due to Internal Server Error (Status code 500).
@@ -282,12 +310,13 @@ Failure may also occur due to Internal Server Error (Status code 500).
 
 ## 6. Like a Post
 
-**Description:** Likes or Unlikes (toggles) a post. 
+**Description:** Likes or Unlikes (toggles i.e. likes if not already, unlikes if liked) a post. 
 
 **URL:** `/posts/:post_id/likes/`
 
 **Method:** `POST`
 
+**Request Header** `Authorization: Bearer <access_token>`
 
 **Response Body**
  
@@ -299,7 +328,7 @@ Failure may also occur due to Internal Server Error (Status code 500).
     "message": "Post Liked/Unliked",
     "post": {
         "post_id": "167acf74",
-        "liked": 99,
+        "likes_count": 99,
         }
     }
     ```
@@ -323,10 +352,11 @@ Failure may also occur due to Internal Server Error (Status code 500).
 
 **Description:** Retrives a list of posts from user and/or their friends. 
 
-**URL:** `/posts/:post_id/likes/`
+**URL:** `/posts/list/`
 
 **Method:** `GET`
 
+**Request Header** `Authorization: Bearer <access_token>`
 
 **Response Body**
  
@@ -336,12 +366,12 @@ Failure may also occur due to Internal Server Error (Status code 500).
     ```
     {
     "message": "Posts Retrived Successfully",
-    "posts": {
+    "posts": [{
         ... Post 1....
         },
         {
             ... Post 2 ...
-        }
+        }]
 
     }
     ```
@@ -364,7 +394,7 @@ Failure may also occur due to Internal Server Error (Status code 500).
 |--------|--------|
 | email | Valid email format, max 255 characters |
 | username | Alphanumeric, 5-25 characters, unique |
-| password | Alphanumeric, 8-32 characters, must inlcude atleast one number, special character, uppercase and lowercase alphabet. |
+| password | Alphanumeric, 8-32 characters, must include atleast one number, special character, uppercase and lowercase alphabet. |
 | recipient_id | Valid id for a user other than self. |
 | request_id | Valid id for a request sent to this user. |
 | post_id | Valid id for a post that exists. |
